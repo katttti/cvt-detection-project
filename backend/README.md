@@ -1,3 +1,3 @@
 # Backend
 
-Backend for CVT detection.
+Backend API server for CVT detection.
