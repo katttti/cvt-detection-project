@@ -1,3 +1,3 @@
 # Model
 
-LLM Model for CVT detection.
+LLM Model and risk scoring module for CVT detection.
