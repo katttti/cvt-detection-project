@@ -1,3 +1,3 @@
 # App
 
-Flutter app for CVT detection.
+Flutter mobile app for CVT detection.
