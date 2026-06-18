@@ -1,0 +1,84 @@
+{
+  "category": {
+    "macro_f1": 0.9948894451397581,
+    "accuracy": 0.9967320261437909,
+    "classification_report": {
+      "게임사기": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 26.0
+      },
+      "쇼핑몰사기": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 26.0
+      },
+      "연예빙자로맨스": {
+        "precision": 0.9583333333333334,
+        "recall": 1.0,
+        "f1-score": 0.9787234042553191,
+        "support": 23.0
+      },
+      "일반일상": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 112.0
+      },
+      "정상송금": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 41.0
+      },
+      "지인사칭": {
+        "precision": 1.0,
+        "recall": 0.9615384615384616,
+        "f1-score": 0.9803921568627451,
+        "support": 26.0
+      },
+      "직거래사기": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 26.0
+      },
+      "투자사기": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 26.0
+      },
+      "accuracy": 0.9967320261437909,
+      "macro avg": {
+        "precision": 0.9947916666666667,
+        "recall": 0.9951923076923077,
+        "f1-score": 0.9948894451397581,
+        "support": 306.0
+      },
+      "weighted avg": {
+        "precision": 0.9968681917211327,
+        "recall": 0.9967320261437909,
+        "f1-score": 0.9967347528637376,
+        "support": 306.0
+      }
+    }
+  },
+  "is_risk": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "confusion_matrix": [
+      [
+        153,
+        0
+      ],
+      [
+        0,
+        153
+      ]
+    ]
+  }
+}

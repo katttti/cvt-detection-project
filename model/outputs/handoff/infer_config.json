@@ -1,0 +1,26 @@
+{
+  "max_len": 320,
+  "do_lower_case": false,
+  "special_tokens": {
+    "cls_token": "[CLS]",
+    "cls_token_id": 2,
+    "sep_token": "[SEP]",
+    "sep_token_id": 3,
+    "pad_token": "[PAD]",
+    "pad_token_id": 0,
+    "unk_token": "[UNK]",
+    "unk_token_id": 1
+  },
+  "truncation": "tail_keep",
+  "truncation_note": "토큰 길이가 max_len-2를 넘으면 앞쪽을 자르고 뒤쪽(최근 turn)을 유지한다. [CLS] ... [SEP] 형태로 양 끝에 특수토큰을 추가한 뒤 [PAD]로 패딩한다.",
+  "speaker_masking_note": "학습 데이터의 화자 라벨이 is_risk와 1:1로 대응되어 누수되는 문제가 있어, 대화별로 등장 순서 기준 화자1/화자2/...로 마스킹한 뒤 학습했다. 추론 시에도 입력 turns의 speaker를 동일하게 화자1/화자2/...로 정규화해야 한다(infer.py의 encode_turns가 이를 자동 처리).",
+  "inputs": {
+    "input_ids": {"shape": [1, 320], "dtype": "int32"},
+    "attention_mask": {"shape": [1, 320], "dtype": "int32"}
+  },
+  "outputs": {
+    "category_logits": {"shape": [1, 8], "dtype": "float32", "postprocess": "softmax -> argmax -> label_map.json"},
+    "risk_logit": {"shape": [1, 1], "dtype": "float32", "postprocess": "sigmoid -> threshold 0.5 -> is_risk, raw sigmoid value -> pressure_score"}
+  },
+  "risk_threshold": 0.5
+}
