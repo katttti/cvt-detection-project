@@ -1,0 +1,6 @@
+lightgbm==4.6.0
+joblib
+pandas
+scikit-learn
+fastapi
+uvicorn

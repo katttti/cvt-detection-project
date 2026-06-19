@@ -1,0 +1,40 @@
+{
+  "features": [
+    "pressure_score",
+    "delta_t_sec",
+    "amount",
+    "prior_relation_score",
+    "receiver_new_flag",
+    "category"
+  ],
+  "monotone_constraints": {
+    "pressure_score": 1,
+    "delta_t_sec": -1,
+    "amount": 1,
+    "prior_relation_score": -1,
+    "receiver_new_flag": 0,
+    "category": 0
+  },
+  "categories": [
+    "게임아이템사기",
+    "로맨스스캠",
+    "몸캠피싱",
+    "정상송금",
+    "직거래사기",
+    "협박갈취"
+  ],
+  "thresholds": {
+    "SAFE": 0.3,
+    "YELLOW": 0.6,
+    "ORANGE": 0.85
+  },
+  "levels": [
+    "SAFE",
+    "YELLOW",
+    "ORANGE",
+    "RED"
+  ],
+  "test_auc": 0.8867,
+  "test_f1": 0.8789,
+  "best_iteration": 56
+}
