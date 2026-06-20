@@ -17,7 +17,7 @@ For the second public app service, add a second forwarding rule such as:
 Use this when you want to give a friend or teammate a working external URL right now.
 
 Recommended setup:
-- run `cvt-api` on local port `8000`
+- run `cvt-api` on local port `3000`
 - run `cvt-ops` on local port `3001`
 - expose both with `cloudflared tunnel --url ...`
 
