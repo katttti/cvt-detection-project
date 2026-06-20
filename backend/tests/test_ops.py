@@ -30,5 +30,5 @@ async def test_ops_root_returns_service_summary_when_authenticated():
 
     assert response.status_code == 200
     assert body["service"] == "cvt-ops"
-    assert body["api_port"] == 8000
-    assert body["ops_port"] == 3000
+    assert body["api_port"] == 3000
+    assert body["ops_port"] == 3001

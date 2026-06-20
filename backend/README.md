@@ -44,7 +44,7 @@ Start the API server:
 
 ```bash
 CVT_SHARED_PASSWORD="replace-me" \
-backend/.venv/bin/python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
+backend/.venv/bin/python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 3000
 ```
 
 Start the ops server:
@@ -52,7 +52,17 @@ Start the ops server:
 ```bash
 CVT_SHARED_PASSWORD="replace-me" \
 CVT_OPS_USERNAME="friend" \
-backend/.venv/bin/python -m uvicorn backend.app.ops:ops_app --host 127.0.0.1 --port 3000
+backend/.venv/bin/python -m uvicorn backend.app.ops:ops_app --host 0.0.0.0 --port 3001
 ```
 
 Or run both with `pm2` using [ecosystem.config.cjs](./ecosystem.config.cjs).
+
+## Router Port Forwarding
+
+If your router already forwards:
+- external `10808` -> internal `192.168.0.187:3000`
+
+then the backend API should run on internal port `3000`.
+
+To expose the second public service, add one more forwarding rule:
+- external `10809` -> internal `192.168.0.187:3001`

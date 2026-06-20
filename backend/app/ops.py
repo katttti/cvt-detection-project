@@ -12,8 +12,8 @@ def ops_root(credentials: HTTPBasicCredentials = Depends(ops_basic)) -> dict[str
     return {
         "service": "cvt-ops",
         "status": "ok",
-        "api_port": 8000,
-        "ops_port": 3000,
+        "api_port": 3000,
+        "ops_port": 3001,
         "public_routes": ["/", "/healthz"],
     }
 

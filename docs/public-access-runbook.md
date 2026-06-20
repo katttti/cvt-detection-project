@@ -2,13 +2,23 @@
 
 This document separates two modes of public access for the Mac mini backend.
 
+## Router Screenshot Mapping
+
+The provided router screenshot shows:
+- `backend`: `192.168.0.187`, external port `10808`, internal port `3000`, `TCP`
+- `ssh`: `192.168.0.187`, external port `2222`, internal port `22`, `TCP`
+
+That means the backend API should run on the Mac mini at internal port `3000`.
+For the second public app service, add a second forwarding rule such as:
+- `ops`: `192.168.0.187`, external port `10809`, internal port `3001`, `TCP`
+
 ## 1. Temporary Sharing Mode
 
 Use this when you want to give a friend or teammate a working external URL right now.
 
 Recommended setup:
 - run `cvt-api` on local port `8000`
-- run `cvt-ops` on local port `3000`
+- run `cvt-ops` on local port `3001`
 - expose both with `cloudflared tunnel --url ...`
 
 Properties:
@@ -64,13 +74,13 @@ Start the two local services:
 
 ```bash
 CVT_SHARED_PASSWORD="replace-me" \
-pm2 start "backend/.venv/bin/python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000" \
+pm2 start "backend/.venv/bin/python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 3000" \
   --name cvt-api \
   --cwd /Users/katykim/Desktop/Finnect-challenge/cvt-detection-project
 
 CVT_SHARED_PASSWORD="replace-me" \
 CVT_OPS_USERNAME="friend" \
-pm2 start "backend/.venv/bin/python -m uvicorn backend.app.ops:ops_app --host 127.0.0.1 --port 3000" \
+pm2 start "backend/.venv/bin/python -m uvicorn backend.app.ops:ops_app --host 0.0.0.0 --port 3001" \
   --name cvt-ops \
   --cwd /Users/katykim/Desktop/Finnect-challenge/cvt-detection-project
 ```
@@ -78,8 +88,8 @@ pm2 start "backend/.venv/bin/python -m uvicorn backend.app.ops:ops_app --host 12
 Create temporary public URLs:
 
 ```bash
-cloudflared tunnel --url http://127.0.0.1:8000
 cloudflared tunnel --url http://127.0.0.1:3000
+cloudflared tunnel --url http://127.0.0.1:3001
 ```
 
 ## 5. Commands For Long-Lived URLs
@@ -111,9 +121,9 @@ credentials-file: /Users/katykim/.cloudflared/<tunnel-id>.json
 
 ingress:
   - hostname: api.your-domain.com
-    service: http://127.0.0.1:8000
-  - hostname: ops.your-domain.com
     service: http://127.0.0.1:3000
+  - hostname: ops.your-domain.com
+    service: http://127.0.0.1:3001
   - service: http_status:404
 ```
 
@@ -136,3 +146,13 @@ For long-lived sharing:
 - stable API URL
 - stable ops URL
 - same auth values, or migrate to Cloudflare Access
+
+## Direct Router Access
+
+If you use the router forwarding rules instead of Cloudflare, the share format becomes:
+
+- API: `http://<public-ip>:10808`
+- Ops: `http://<public-ip>:10809`
+- SSH: `ssh -p 2222 <user>@<public-ip>`
+
+Replace `<public-ip>` with the current WAN IP of the router.
