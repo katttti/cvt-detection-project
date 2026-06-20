@@ -15,3 +15,4 @@ Planned responsibilities:
 - Expose health and ops endpoints for external monitoring
 
 See [docs/backend-architecture-draft.md](../docs/backend-architecture-draft.md) for the current backend and data model draft.
+See [docs/mac-mini-public-server-checklist.md](../docs/mac-mini-public-server-checklist.md) for the deployment checklist to expose two public services from the Mac mini.
