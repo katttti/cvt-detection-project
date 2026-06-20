@@ -40,6 +40,12 @@ python3 -m venv backend/.venv
 backend/.venv/bin/pip install -r backend/requirements.txt
 ```
 
+Create the local environment file:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
 Start the API server:
 
 ```bash
@@ -56,6 +62,13 @@ backend/.venv/bin/python -m uvicorn backend.app.ops:ops_app --host 0.0.0.0 --por
 ```
 
 Or run both with `pm2` using [ecosystem.config.cjs](./ecosystem.config.cjs).
+For repeatable startup on the Mac mini, use:
+
+```bash
+chmod +x backend/start_services.sh backend/check_services.sh
+backend/start_services.sh
+backend/check_services.sh
+```
 
 ## Router Port Forwarding
 
