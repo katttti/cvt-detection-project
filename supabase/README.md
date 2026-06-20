@@ -13,6 +13,7 @@ This project uses Supabase for:
 
 Core migration:
 - `supabase/migrations/20260620_create_cvt_core_schema.sql`
+- `supabase/migrations/20260620_optimize_cvt_core_schema.sql`
 
 Defined tables:
 - `profiles`
@@ -28,3 +29,7 @@ The migration also includes:
 - foreign keys between the core event tables
 - indexes for profile/event lookup
 - row level security policies for self-owned and related records
+
+Optimization migration includes:
+- covering indexes for foreign keys flagged by Supabase advisors
+- RLS policy rewrites using `(select auth.uid())` for better planner behavior
