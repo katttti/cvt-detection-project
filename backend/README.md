@@ -46,6 +46,9 @@ Create the local environment file:
 cp backend/.env.example backend/.env
 ```
 
+If `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set, the API writes to Supabase.
+If they are omitted, the API falls back to the in-memory development store.
+
 Start the API server:
 
 ```bash
@@ -60,6 +63,22 @@ CVT_SHARED_PASSWORD="replace-me" \
 CVT_OPS_USERNAME="friend" \
 backend/.venv/bin/python -m uvicorn backend.app.ops:ops_app --host 0.0.0.0 --port 3001
 ```
+
+To use the real Supabase schema, install the Python client and pass the service role key:
+
+```bash
+backend/.venv/bin/pip install -r backend/requirements.txt
+
+CVT_SHARED_PASSWORD="replace-me" \
+SUPABASE_URL="https://your-project.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="your-service-role-key" \
+backend/.venv/bin/python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 3000
+```
+
+Real Supabase writes require valid upstream records:
+- `profiles.id` must already exist for each `profile_id`
+- `devices.id` must already exist for each `device_id`
+- `guardian_links` should contain active teen-to-guardian mappings if you want `red` risk events to create guardian notifications
 
 Or run both with `pm2` using [ecosystem.config.cjs](./ecosystem.config.cjs).
 For repeatable startup on the Mac mini, use:

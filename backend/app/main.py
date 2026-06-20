@@ -12,7 +12,7 @@ from backend.app.models import (
     TransferEventRecord,
 )
 from backend.app.scoring import score_risk
-from backend.app.store import store
+from backend.app.store import EventStore, get_store
 
 app = FastAPI(title="CVT Detection Backend", version="0.1.0")
 
@@ -26,26 +26,25 @@ def health() -> HealthResponse:
 def create_pressure_event(
     payload: PressureEventCreate,
     _: None = Depends(verify_access_password),
+    store: EventStore = Depends(get_store),
 ) -> PressureEventRecord:
-    event = PressureEventRecord(**payload.model_dump())
-    store.pressure_events.append(event)
-    return event
+    return store.create_pressure_event(payload)
 
 
 @app.post("/v1/transfer-events", response_model=TransferEventRecord, status_code=201)
 def create_transfer_event(
     payload: TransferEventCreate,
     _: None = Depends(verify_access_password),
+    store: EventStore = Depends(get_store),
 ) -> TransferEventRecord:
-    event = TransferEventRecord(**payload.model_dump())
-    store.transfer_events.append(event)
-    return event
+    return store.create_transfer_event(payload)
 
 
 @app.post("/v1/risk-assessments", response_model=RiskAssessmentResponse)
 def create_risk_assessment(
     payload: RiskAssessmentRequest,
     _: None = Depends(verify_access_password),
+    store: EventStore = Depends(get_store),
 ) -> RiskAssessmentResponse:
     result = score_risk(
         pressure_score=payload.pressure_score,
@@ -63,23 +62,26 @@ def create_risk_assessment(
         recommended_action=result.recommended_action,
         reason_codes=result.reason_codes,
     )
-    store.risk_assessments.append(assessment)
+    saved_assessment = store.create_risk_assessment(assessment)
 
     if result.risk_level == "red":
-        store.guardian_notifications.append(
-            GuardianNotification(
-                guardian_id=payload.profile_id,
-                risk_level=result.risk_level,
-                channel="in_app",
-                delivery_status="queued",
+        for guardian_id in store.list_active_guardian_ids(payload.profile_id):
+            store.create_guardian_notification(
+                GuardianNotification(
+                    risk_assessment_id=saved_assessment.id,
+                    guardian_id=guardian_id,
+                    risk_level=result.risk_level,
+                    channel="in_app",
+                    delivery_status="queued",
+                )
             )
-        )
 
-    return assessment
+    return saved_assessment
 
 
 @app.get("/v1/guardian-notifications", response_model=list[GuardianNotification])
 def list_guardian_notifications(
     _: None = Depends(verify_access_password),
+    store: EventStore = Depends(get_store),
 ) -> list[GuardianNotification]:
-    return store.guardian_notifications
+    return store.list_guardian_notifications()

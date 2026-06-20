@@ -46,6 +46,7 @@ class RiskAssessmentRequest(BaseModel):
 
 
 class RiskAssessmentResponse(BaseModel):
+    id: UUID = Field(default_factory=uuid4)
     profile_id: UUID
     pressure_event_id: UUID
     transfer_event_id: UUID
@@ -58,8 +59,10 @@ class RiskAssessmentResponse(BaseModel):
 
 class GuardianNotification(BaseModel):
     id: UUID = Field(default_factory=uuid4)
+    risk_assessment_id: UUID
     guardian_id: UUID
     risk_level: str
     channel: str
     delivery_status: str
+    sent_at: datetime | None = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
